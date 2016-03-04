@@ -71,6 +71,20 @@ type T_cl_command_queue_properties     = T_cl_bitfield;
 type T_cl_device_partition_property    = T_intptr_t;
 type T_cl_device_affinity_domain       = T_cl_bitfield;
 
+type P_cl_bool                         = P_cl_uint;
+type P_cl_bitfield                     = P_cl_ulong;
+type P_cl_device_type                  = P_cl_bitfield;
+type P_cl_platform_info                = P_cl_uint;
+type P_cl_device_info                  = P_cl_uint;
+type P_cl_device_fp_config             = P_cl_bitfield;
+type P_cl_device_mem_cache_type        = P_cl_uint;
+type P_cl_device_local_mem_type        = P_cl_uint;
+type P_cl_device_exec_capabilities     = P_cl_bitfield;
+type P_cl_device_svm_capabilities      = P_cl_bitfield;
+type P_cl_command_queue_properties     = P_cl_bitfield;
+type P_cl_device_partition_property    = P_intptr_t;
+type P_cl_device_affinity_domain       = P_cl_bitfield;
+
 type T_cl_context_properties           = T_intptr_t;
 type T_cl_context_info                 = T_cl_uint;
 type T_cl_queue_properties             = T_cl_bitfield;
@@ -106,6 +120,42 @@ type T_cl_command_type                 = T_cl_uint;
 type T_cl_profiling_info               = T_cl_uint;
 type T_cl_sampler_properties           = T_cl_bitfield;
 type T_cl_kernel_exec_info             = T_cl_uint;
+
+type P_cl_context_properties           = P_intptr_t;
+type P_cl_context_info                 = P_cl_uint;
+type P_cl_queue_properties             = P_cl_bitfield;
+type P_cl_command_queue_info           = P_cl_uint;
+type P_cl_channel_order                = P_cl_uint;
+type P_cl_channel_type                 = P_cl_uint;
+type P_cl_mem_flags                    = P_cl_bitfield;
+type P_cl_svm_mem_flags                = P_cl_bitfield;
+type P_cl_mem_object_type              = P_cl_uint;
+type P_cl_mem_info                     = P_cl_uint;
+type P_cl_mem_migration_flags          = P_cl_bitfield;
+type P_cl_image_info                   = P_cl_uint;
+type P_cl_buffer_create_type           = P_cl_uint;
+type P_cl_addressing_mode              = P_cl_uint;
+type P_cl_filter_mode                  = P_cl_uint;
+type P_cl_sampler_info                 = P_cl_uint;
+type P_cl_map_flags                    = P_cl_bitfield;
+type P_cl_pipe_properties              = P_intptr_t;
+type P_cl_pipe_info                    = P_cl_uint;
+type P_cl_program_info                 = P_cl_uint;
+type P_cl_program_build_info           = P_cl_uint;
+type P_cl_program_binary_type          = P_cl_uint;
+type P_cl_build_status                 = P_cl_int;
+type P_cl_kernel_info                  = P_cl_uint;
+type P_cl_kernel_arg_info              = P_cl_uint;
+type P_cl_kernel_arg_address_qualifier = P_cl_uint;
+type P_cl_kernel_arg_access_qualifier  = P_cl_uint;
+type P_cl_kernel_arg_type_qualifier    = P_cl_bitfield;
+type P_cl_kernel_work_group_info       = P_cl_uint;
+type P_cl_kernel_sub_group_info        = P_cl_uint;
+type P_cl_event_info                   = P_cl_uint;
+type P_cl_command_type                 = P_cl_uint;
+type P_cl_profiling_info               = P_cl_uint;
+type P_cl_sampler_properties           = P_cl_bitfield;
+type P_cl_kernel_exec_info             = P_cl_uint;
 
 type P_cl_image_format = ^T_cl_image_format;
      T_cl_image_format = record
@@ -690,10 +740,10 @@ clGetDeviceInfo( device_               :T_cl_device_id;
 
 function
 clCreateSubDevices(       in_device_       :T_cl_device_id;
-                    const properties_      :array of T_cl_device_partition_property;
+                    const properties_      :P_cl_device_partition_property;
                           num_devices_     :T_cl_uint;
                           out_devices_     :P_cl_device_id;
-                          num_devices_ret_ :P_cl_uint ) :T_cl_int; stdcall; external DLLNAME;
+                          num_devices_ret_ :P_cl_uint                      ) :T_cl_int; stdcall; external DLLNAME;
 
 function
 clRetainDevice( device_ :T_cl_device_id ) :T_cl_int; stdcall; external DLLNAME;
@@ -719,19 +769,19 @@ type PFN_clCreateContext_notify = procedure( const _1:P_char; const _2:P_void; _
 
 (* Context APIs  *)
 function
-clCreateContext( const properties_  :array of T_cl_context_properties;
+clCreateContext( const properties_  :P_cl_context_properties;
                        num_devices_ :T_cl_uint;
                  const devices_     :P_cl_device_id;
                        pfn_notify_  :PFN_clCreateContext_notify;
                        user_data_   :P_void;
-                       errcode_ret_ :P_cl_int                         ) :T_cl_context; stdcall; external DLLNAME;
+                       errcode_ret_ :P_cl_int                   ) :T_cl_context; stdcall; external DLLNAME;
 
 function
-clCreateContextFromType( const properties_  :array of T_cl_context_properties;
+clCreateContextFromType( const properties_  :P_cl_context_properties;
                                device_type_ :T_cl_device_type;
                                pfn_notify_  :PFN_clCreateContext_notify;
                                user_data_   :P_void;
-                               errcode_ret_ :P_cl_int                         ) :T_cl_context; stdcall; external DLLNAME;
+                               errcode_ret_ :P_cl_int                   ) :T_cl_context; stdcall; external DLLNAME;
 
 function
 clRetainContext( context_ :T_cl_context ) :T_cl_int; stdcall; external DLLNAME;
@@ -750,8 +800,8 @@ clGetContextInfo( context_              :T_cl_context;
 function
 clCreateCommandQueueWithProperties(       context_     :T_cl_context;
                                           device_      :T_cl_device_id;
-                                    const properties_  :array of T_cl_queue_properties;
-                                          errcode_ret_ :P_cl_int                       ) :T_cl_command_queue; stdcall; external DLLNAME;
+                                    const properties_  :P_cl_queue_properties;
+                                          errcode_ret_ :P_cl_int              ) :T_cl_command_queue; stdcall; external DLLNAME;
 
 function
 clRetainCommandQueue( command_queue_ :T_cl_command_queue ) :T_cl_int; stdcall; external DLLNAME;
@@ -794,8 +844,8 @@ clCreatePipe(       context_          :T_cl_context;
                     flags_            :T_cl_mem_flags;
                     pipe_packet_size_ :T_cl_uint;
                     pipe_max_packets_ :T_cl_uint;
-              const properties_       :array of T_cl_pipe_properties;
-                    errcode_ret_      :P_cl_int                      ) :T_cl_mem; stdcall; external DLLNAME;
+              const properties_       :P_cl_pipe_properties;
+                    errcode_ret_      :P_cl_int             ) :T_cl_mem; stdcall; external DLLNAME;
 
 function
 clRetainMemObject( memobj_ :T_cl_mem ) :T_cl_int; stdcall; external DLLNAME;
@@ -853,8 +903,8 @@ clSVMFree( context_     :T_cl_context;
 (* Sampler APIs *)
 function
 clCreateSamplerWithProperties(       context_           :T_cl_context;
-                               const normalized_coords_ :array of T_cl_sampler_properties;
-                                     errcode_ret_       :P_cl_int                         ) :T_cl_sampler; stdcall; external DLLNAME;
+                               const normalized_coords_ :P_cl_sampler_properties;
+                                     errcode_ret_       :P_cl_int                ) :T_cl_sampler; stdcall; external DLLNAME;
 
 function
 clRetainSampler( sampler_ :T_cl_sampler ) :T_cl_int; stdcall; external DLLNAME;
@@ -873,25 +923,25 @@ clGetSamplerInfo( sampler_              :T_cl_sampler;
 function
 clCreateProgramWithSource(       context_     :T_cl_context;
                                  count_       :T_cl_uint;
-                           const strings_     :array of P_char;
+                           const strings_     :PP_char;
                            const lengths_     :P_size_t;
-                                 errcode_ret_ :P_cl_int        ) :T_cl_program; stdcall; external DLLNAME;
+                                 errcode_ret_ :P_cl_int     ) :T_cl_program; stdcall; external DLLNAME;
 
 function
 clCreateProgramWithBinary(       context_     :T_cl_context;
                                  num_devices_ :T_cl_uint;
                            const device_list_ :P_cl_device_id;
                            const lengths_     :P_size_t;
-                           const binaries_    :array of P_unsigned_char;
+                           const binaries_    :PP_unsigned_char;
                            binary_status_     :P_cl_int;
-                           errcode_ret_       :P_cl_int                 ) :T_cl_program; stdcall; external DLLNAME;
+                           errcode_ret_       :P_cl_int         ) :T_cl_program; stdcall; external DLLNAME;
 
 function
-clCreateProgramWithBuiltInKernels( context_ :T_cl_context;
-                                   num_devices_ :T_cl_uint;
-                                   const device_list_ :P_cl_device_id;
+clCreateProgramWithBuiltInKernels(       context_      :T_cl_context;
+                                         num_devices_  :T_cl_uint;
+                                   const device_list_  :P_cl_device_id;
                                    const kernel_names_ :P_char;
-                                   errcode_ret_ :P_cl_int ) :T_cl_program; stdcall; external DLLNAME;
+                                         errcode_ret_  :P_cl_int       ) :T_cl_program; stdcall; external DLLNAME;
 
 function
 clCreateProgramWithIL(       context_     :T_cl_context;
@@ -922,7 +972,7 @@ clCompileProgram(       program_              :T_cl_program;
                   const options_              :P_char;
                         num_input_headers_    :T_cl_uint;
                   const input_headers_        :P_cl_program;
-                  const header_include_names_ :array of P_char;
+                  const header_include_names_ :PP_char;
                         pfn_notify_           :PFN_clBuildProgram_notify;
                         user_data_            :P_void                    ) :T_cl_int; stdcall; external DLLNAME;
 function
@@ -1301,7 +1351,7 @@ clEnqueueNativeKernel(       command_queue_           :T_cl_command_queue;
                              cb_args_                 :T_size_t;
                              num_mem_objects_         :T_cl_uint;
                        const mem_list_                :P_cl_mem;
-                       const args_mem_loc_            :array of P_void;
+                       const args_mem_loc_            :PP_void;
                              num_events_in_wait_list_ :T_cl_uint;
                        const event_wait_list_         :P_cl_event;
                              event_                   :P_cl_event                          ) :T_cl_int; stdcall; external DLLNAME;
@@ -1320,13 +1370,13 @@ clEnqueueBarrierWithWaitList(       command_queue_           :T_cl_command_queue
 
 type PFN_clEnqueueSVMFree_free_func = procedure( queue_            :T_cl_command_queue;
                                                  num_svm_pointers_ :T_cl_uint;
-                                                 svm_pointers_     :array of P_void;
+                                                 svm_pointers_     :PP_void;
                                                  user_data_        :P_void             );
 
 function
 clEnqueueSVMFree(       command_queue_           :T_cl_command_queue;
                         num_svm_pointers_        :T_cl_uint;
-                        svm_pointers_            :array of P_void;
+                        svm_pointers_            :PP_void;
                         pfn_free_func_           :PFN_clEnqueueSVMFree_free_func;
                         user_data_               :P_void;
                         num_events_in_wait_list_ :T_cl_uint;
@@ -1373,7 +1423,7 @@ clEnqueueSVMUnmap(       command_queue_           :T_cl_command_queue;
 function
 clEnqueueSVMMigrateMem(       command_queue_           :T_cl_command_queue;
                               num_svm_pointers_        :T_cl_uint;
-                        const svm_pointers_            :array of P_void;
+                        const svm_pointers_            :PP_void;
                         const sizes_                   :P_size_t;
                               flags_                   :T_cl_mem_migration_flags;
                               num_events_in_wait_list_ :T_cl_uint;
